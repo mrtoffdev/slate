@@ -7,9 +7,9 @@ struct Schedule {
         has_conflict:   bool,
 
         // Time Metadata
-        start:          u16,
-        end:            u16,
-        duration:       u16,
+        start:          Time,
+        end:            Time,
+        duration:       Duration,
 }
 
 #[derive(Default, Clone, PartialEq)]
