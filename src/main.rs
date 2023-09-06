@@ -92,6 +92,10 @@ fn main() {
                                 continue;
                         }
 
+                        if line.starts_with("---"){
+                                break
+                        }
+
                         if line.starts_with('-') {
                                 SECTION = false;
                                 subject_collection.push(subject_holder.clone());
