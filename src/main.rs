@@ -107,39 +107,47 @@ fn main() {
                                 continue
                         }
 
+                        fn next_line(split: &mut SplitWhitespace) -> String {
+                                split
+                                .next()
+                                .unwrap_or("N/A")
+                                .to_owned()
+                        }
+
+                        fn next_line_split(split: &mut SplitWhitespace,
+                                           prefix: char) -> Vec<String> {
+                                split
+                                .next()
+                                .unwrap_or("N/A")
+                                .split(prefix)
+                                .map(str::to_owned)
+                                .collect()
+                        }
+
+                        fn next_line_time(split: &mut SplitWhitespace) -> Vec<u8> {
+                                split
+                                .next()
+                                .unwrap_or("0")
+                                .split(':')
+                                .map(|x|x.parse::<u8>().unwrap())
+                                .collect()
+                        }
+
                         if SECTION {
                                 println!("Added to Subject");
                                 let mut split_line: SplitWhitespace = line
                                                                 .split_whitespace();
 
-                                let block: String               = split_line
-                                                                .next()
-                                                                .unwrap_or("N/A")
-                                                                .to_owned();
-                                let mode: String                = split_line
-                                                                .next()
-                                                                .unwrap_or("N/A")
-                                                                .to_owned();
-                                let units: String               = split_line
-                                                                .next()
-                                                                .unwrap_or("0")
-                                                                .to_owned();
+                                // Common Schedule Metadata
+                                let block: String       = next_line(&mut split_line);
+                                let mode: String        = next_line(&mut split_line);
+                                let units: String       = next_line(&mut split_line);
+                                let day: Vec<String>    = next_line_split(&mut
+                                                                split_line, ',');
 
-                                let day: Vec<&str>              = split_line
-                                                                .next()
-                                                                .unwrap_or("x")
-                                                                .split(',')
-                                                                .collect();
-
-                                // Time
-                                let start_split:Vec<u8>         = split_line
-                                                                .next()
-                                                                .unwrap_or("N/A")
-                                                                .split(':')
-                                                                .map(|x|
-                                                                        x.parse::<u8>()
-                                                                        .unwrap())
-                                                                .collect();
+                                // Start Time
+                                let start_split:Vec<u8> = next_line_time(&mut
+                                                                split_line);
 
                                 let mut start_hr:u8             = start_split[0];
                                 let start_mn:u8                 = start_split[1];
