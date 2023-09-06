@@ -198,7 +198,7 @@ fn main() {
                                 println!("End: {}", end);
 
                                 subject_holder.schedules.push(Schedule {
-                                        subject: subject_collection[top-1].name
+                                        subject: subject_holder.name
                                                 .to_owned(),
                                         room: "".to_string(),
                                         spotted: false,
