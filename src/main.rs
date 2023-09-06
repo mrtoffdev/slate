@@ -151,7 +151,7 @@ fn main() {
                                                                 .to_owned();
                                 println!("Start Half: {start_half}");
 
-                                if start_half == "PM" {
+                                if start_half == "PM" && start_hr != 12 {
                                         start_hr += 12;
                                 }
 
@@ -179,7 +179,7 @@ fn main() {
                                         .unwrap_or("N/A")
                                         .to_owned();
 
-                                if end_half == "PM" {
+                                if end_half == "PM" && end_hr != 12 {
                                         end_hr += 12;
                                 }
 
