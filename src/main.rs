@@ -1,4 +1,4 @@
-#[derive(Default, Clone, PartialEq)]
+#[derive(Clone, PartialEq)]
 struct Schedule {
         // Subject Metadata
         subject:        String,
@@ -10,6 +10,20 @@ struct Schedule {
         start:          Time,
         end:            Time,
         duration:       Duration,
+}
+
+impl Default for Schedule {
+        fn default() -> Self {
+                Schedule {
+                        subject:        "N/A".to_string(),
+                        room:           "".to_string(),
+                        spotted:        false,
+                        has_conflict:   false,
+                        start:          Time::from_hms(0,0,0).unwrap(),
+                        end:            Time::from_hms(0,0,0).unwrap(),
+                        duration:       Duration::default(),
+                }
+        }
 }
 
 #[derive(Default, Clone, PartialEq)]
