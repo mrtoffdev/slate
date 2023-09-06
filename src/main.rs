@@ -58,6 +58,7 @@ use std::path::Path;
 use std::str::SplitWhitespace;
 
 use time::Time;
+use time::Duration;
 
 fn main() {
 
@@ -202,9 +203,9 @@ fn main() {
                                         room: "".to_string(),
                                         spotted: false,
                                         has_conflict: false,
-                                        start: 0,
-                                        end: 0,
-                                        duration: 0,
+                                        start,
+                                        end,
+                                        duration: start - end,
                                 })
                         }
                         println!("\n")
