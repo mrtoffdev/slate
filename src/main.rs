@@ -91,6 +91,7 @@ fn main() {
                                 println!("whitespace found");
                                 continue
                         }
+
                         if SECTION {
                                 println!("Added to Subject");
                                 let mut split_line: SplitWhitespace = line
@@ -114,10 +115,84 @@ fn main() {
                                                                 .unwrap_or("x")
                                                                 .split(',')
                                                                 .collect();
+
+                                // Time
+                                let start_split:Vec<u8>         = split_line
+                                                                .next()
+                                                                .unwrap_or("N/A")
+                                                                .split(':')
+                                                                .map(|x|
+                                                                        x.parse::<u8>()
+                                                                        .unwrap())
+                                                                .collect();
+
+                                let mut start_hr:u8             = start_split[0];
+                                let start_mn:u8                 = start_split[1];
+                                let start_sc:u8                 = 0;
+
+                                let start_half:String           = split_line
+                                                                .next()
+                                                                .unwrap_or("N/A")
+                                                                .to_owned();
+                                println!("Start Half: {start_half}");
+
+                                if start_half == "PM" {
+                                        start_hr += 12;
+                                }
+
+                                let start: Time                 = Time::from_hms(
+                                                                start_hr,
+                                                                start_mn,
+                                                                start_sc
+                                                                ).unwrap();
+
+                                let end_split:Vec<u8>           = split_line
+                                                                .next()
+                                                                .unwrap_or("N/A")
+                                                                .split(':')
+                                                                .map(|x|
+                                                                        x.parse::<u8>()
+                                                                        .unwrap())
+                                                                .collect();
+
+                                let mut end_hr:u8               = end_split[0];
+                                let end_mn:u8                   = end_split[1];
+                                let end_sc:u8                   = 0;
+
+                                let end_half:String           = split_line
+                                        .next()
+                                        .unwrap_or("N/A")
+                                        .to_owned();
+
+                                if end_half == "PM" {
+                                        end_hr += 12;
+                                }
+
+                                let end: Time                   = Time::from_hms(
+                                        end_hr,
+                                        end_mn,
+                                        end_sc
+                                ).unwrap();
+
+                                // Dialogue
                                 println!("Block {}", block);
                                 println!("Mode {}", mode);
                                 println!("Units {}", units);
                                 println!("Day {}", day.concat());
+                                println!("Start: {}", start);
+                                println!("End: {}", end);
+
+                                subject_holder.schedules.push(Schedule {
+                                        subject: subject_collection[top-1].name
+                                                .to_owned(),
+                                        room: "".to_string(),
+                                        spotted: false,
+                                        has_conflict: false,
+                                        start: 0,
+                                        end: 0,
+                                        duration: 0,
+                                })
+                        }
                         println!("\n")
                 }
         }
