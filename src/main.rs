@@ -46,7 +46,6 @@ use std::str::SplitWhitespace;
 use time::Time;
 
 fn main() {
-    println!("Hello, world!");
 
         const SCHEDULE: &str = "./sch.in";
         fn open_file<P>(file: P) -> io::Result<io::Lines<io::BufReader<File>>>
@@ -92,6 +91,33 @@ fn main() {
                                 println!("whitespace found");
                                 continue
                         }
+                        if SECTION {
+                                println!("Added to Subject");
+                                let mut split_line: SplitWhitespace = line
+                                                                .split_whitespace();
+
+                                let block: String               = split_line
+                                                                .next()
+                                                                .unwrap_or("N/A")
+                                                                .to_owned();
+                                let mode: String                = split_line
+                                                                .next()
+                                                                .unwrap_or("N/A")
+                                                                .to_owned();
+                                let units: String               = split_line
+                                                                .next()
+                                                                .unwrap_or("0")
+                                                                .to_owned();
+
+                                let day: Vec<&str>              = split_line
+                                                                .next()
+                                                                .unwrap_or("x")
+                                                                .split(',')
+                                                                .collect();
+                                println!("Block {}", block);
+                                println!("Mode {}", mode);
+                                println!("Units {}", units);
+                                println!("Day {}", day.concat());
                         println!("\n")
                 }
         }
