@@ -50,6 +50,14 @@ struct Subject {
                         subject B instead.
                         IV. Repeat I - III to subject B
 */
+pub mod models {
+        pub mod schedule;
+        pub mod subject;
+        pub mod week;
+}
+pub mod core {
+        pub mod parser;
+}
 
 use std::fs::File;
 use std::vec::Vec;
@@ -59,6 +67,9 @@ use std::str::SplitWhitespace;
 
 use time::Time;
 use time::Duration;
+
+use models::schedule::Schedule;
+use models::subject::Subject;
 
 fn main() {
 
