@@ -204,6 +204,7 @@ fn main() {
                                 println!("Day {}", day.concat());
                                 println!("Start: {}", start);
                                 println!("End: {}", end);
+                                println!("Duration: {}", end - start);
 
                                 subject_holder.schedules.push(Schedule {
                                         subject: subject_holder.name
@@ -220,6 +221,12 @@ fn main() {
                 }
         }
 
+        println!("Test 1: All Schedules\n");
+        for (i, entry) in subject_collection.iter().enumerate() {
+                println!("{}: {}", i+1, entry.name);
+        }
+
+        println!();
 
         println!("First Subject: {}", subject_collection[0].name);
 
