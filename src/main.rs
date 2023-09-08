@@ -42,80 +42,66 @@ use crate::models::schedule::{Bound, Regular, Schedule};
 fn main() {
 
         const SCHEDULE: &str = "./sch.in";
-        fn open_file<P>(file: P) -> io::Result<io::Lines<io::BufReader<File>>>
-        where P: AsRef<Path>, {
-                Ok(io::BufReader::new(File::open(file)?).lines())
-
-        }
 
         // Build Schedule Node
         let mut subject_collection: Vec<Subject> = vec![];
+
+        // Parse File
         if let Ok(sch_in) = open_file(SCHEDULE) {
-                let mut SECTION = false;
-                let mut subject_holder  = Subject {
-                        name: "".to_string(),
-                        prof: "".to_string(),
-                        schedules: vec![],
-                };
+
+                // Readable Section State
+                let mut SECTION: bool           = false;
+
+                // Temporary Holders
+                let mut SUBJECT: Subject        = Subject::default();
+                let mut PREV_BLOCK: String      = String::new();
 
                 for (i, line) in sch_in.into_iter().flatten().enumerate() {
 
                         let top = subject_collection.len();
-                        // println!("{i}: {line}");
+
+                        // ========== Section Parser ==========
+
+                        // Header line & Section Start
                         if line.starts_with('+') {
                                 SECTION = true;
 
                                 if let Some(name) = line.strip_prefix('+') {
-                                        subject_holder.name = name.to_owned();
+                                        SUBJECT.name = name.to_owned();
                                 }
+
+                                println!("Subject Found: {}", SUBJECT.name);
                                 continue;
                         }
 
+                        // End of File Line
                         if line.starts_with("---"){
                                 break
                         }
 
+                        // Section End Line
                         if line.starts_with('-') {
+                                // End section
                                 SECTION = false;
-                                subject_collection.push(subject_holder.clone());
-                                println!("Subject Dispatched: {}",
-                                        subject_collection[top].name);
+                                //
+                                subject_collection.push(SUBJECT.clone());
+
                                 // reset holder
-                                subject_holder = Subject::default();
+                                println!("Subject pushed to collection: {}",
+                                         subject_collection[top].name);
+                                SUBJECT = Subject::default();
                         }
 
+                        // Empty Line
                         if line.starts_with(' ') || line.starts_with('\n') || line
                                 .is_empty(){
                                 println!("whitespace found");
                                 continue
                         }
 
-                        fn next_line(split: &mut SplitWhitespace) -> String {
-                                split
-                                .next()
-                                .unwrap_or("N/A")
-                                .to_owned()
-                        }
+                        // ====================================
 
-                        fn next_line_split(split: &mut SplitWhitespace,
-                                           prefix: char) -> Vec<String> {
-                                split
-                                .next()
-                                .unwrap_or("N/A")
-                                .split(prefix)
-                                .map(str::to_owned)
-                                .collect()
-                        }
-
-                        fn next_line_time(split: &mut SplitWhitespace) -> Vec<u8> {
-                                split
-                                .next()
-                                .unwrap_or("0")
-                                .split(':')
-                                .map(|x|x.parse::<u8>().unwrap())
-                                .collect()
-                        }
-
+                        // Non-header / terminator line found
                         if SECTION {
                                 println!("Added to Subject");
                                 let mut split_line: SplitWhitespace = line
@@ -146,24 +132,9 @@ fn main() {
                                         start_hr += 12;
                                 }
 
-                                let start: Time                 = Time::from_hms(
-                                                                start_hr,
-                                                                start_mn,
-                                                                start_sc
-                                                                ).unwrap();
-
-                                let end_split:Vec<u8>           = split_line
-                                                                .next()
-                                                                .unwrap_or("N/A")
-                                                                .split(':')
-                                                                .map(|x|
-                                                                        x.parse::<u8>()
-                                                                        .unwrap())
-                                                                .collect();
-
-                                let mut end_hr:u8               = end_split[0];
-                                let end_mn:u8                   = end_split[1];
-                                let end_sc:u8                   = 0;
+                        println!();
+                }
+        }
 
                                 let end_half:String           = split_line
                                         .next()
@@ -180,29 +151,12 @@ fn main() {
                                         end_sc
                                 ).unwrap();
 
-                                // Dialogue
-                                println!("Block {}", block);
-                                println!("Mode {}", mode);
-                                println!("Units {}", units);
-                                println!("Day {}", day.concat());
-                                println!("Start: {}", start);
-                                println!("End: {}", end);
-                                println!("Duration: {}", end - start);
-
-                                subject_holder.schedules.push(Schedule {
-                                        subject: subject_holder.name
-                                                .to_owned(),
-                                        room: "".to_string(),
-                                        spotted: false,
-                                        has_conflict: false,
-                                        start,
-                                        end,
-                                        duration: start - end,
-                                })
                         }
-                        println!("\n")
                 }
         }
+
+        // Output Dialogue
+        {
 
         println!("Test 1: All Schedules\n");
         for (i, entry) in subject_collection.iter().enumerate() {
@@ -242,5 +196,4 @@ fn main() {
 
         println!("First Subject: {}", subject_collection[0].name);
 
-        println!("Schedule Management:");
 }
