@@ -30,6 +30,7 @@ use std::vec::Vec;
 use std::io::{self, BufRead};
 use std::path::Path;
 use std::str::SplitWhitespace;
+use colored::{ColoredString, Colorize};
 
 use time::Time;
 use time::Duration;
@@ -208,6 +209,35 @@ fn main() {
                 println!("{}: {}", i+1, entry.name);
         }
 
+                                // Colored Mode Indicator
+                                let mode_colored = if entry. == "Lab"
+                                { entry.mode.red() }
+                                else
+                                { entry.mode.green() };
+
+                                // Acronym to Full Day
+                                let day_expanded = match entry.day.as_str() {
+                                        "M" => "Monday",
+                                        "T" => "Tuesday",
+                                        "W" => "Wednesday",
+                                        "Th" => "Thursday",
+                                        "F" => "Friday",
+                                        "S" => "Saturday",
+                                        _ => "N/A"
+                                };
+
+                                println!("{: <10} {: <8} [{}]: {} - {} | {}",
+                                         day_expanded,
+                                         entry.block,
+                                         mode_colored,
+                                         entry.start,
+                                         entry.end,
+                                         entry.end - entry.start
+                                )
+                        }
+                        println!()
+                }
+        }
         println!();
 
         println!("First Subject: {}", subject_collection[0].name);
