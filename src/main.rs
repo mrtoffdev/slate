@@ -1,38 +1,3 @@
-#[derive(Clone, PartialEq)]
-struct Schedule {
-        // Subject Metadata
-        subject:        String,
-        room:           String,
-        spotted:        bool,
-        has_conflict:   bool,
-
-        // Time Metadata
-        start:          Time,
-        end:            Time,
-        duration:       Duration,
-}
-
-impl Default for Schedule {
-        fn default() -> Self {
-                Schedule {
-                        subject:        "N/A".to_string(),
-                        room:           "".to_string(),
-                        spotted:        false,
-                        has_conflict:   false,
-                        start:          Time::from_hms(0,0,0).unwrap(),
-                        end:            Time::from_hms(0,0,0).unwrap(),
-                        duration:       Duration::default(),
-                }
-        }
-}
-
-#[derive(Default, Clone, PartialEq)]
-struct Subject {
-        name:           String,
-        prof:           String,
-        schedules:      Vec<Schedule>,
-}
-
 /*
         Schedule Management Process
         1. Fetch subjects to take
@@ -57,6 +22,7 @@ pub mod models {
 }
 pub mod core {
         pub mod parser;
+        pub mod audit;
 }
 
 use std::fs::File;
@@ -68,8 +34,9 @@ use std::str::SplitWhitespace;
 use time::Time;
 use time::Duration;
 
-use models::schedule::Schedule;
 use models::subject::Subject;
+use crate::core::audit::handler;
+use crate::models::schedule::{Bound, Regular, Schedule};
 
 fn main() {
 
