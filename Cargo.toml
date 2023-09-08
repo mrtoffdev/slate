@@ -8,3 +8,9 @@ edition = "2021"
 [dependencies]
 time = "0.3.28" # Date / Time
 calamine = "0.21.2" # Excell / Spreadsheet
+colored = "2.0.4"
+
+[profile.release]
+panic = "abort"
+lto = true
+codegen-units = 1
