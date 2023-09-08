@@ -1,4 +1,4 @@
-use crate::models::schedule::Schedule;
+use crate::models::schedule::{Regular, Schedule};
 #[derive(Default, Clone, PartialEq)]
 pub(crate) struct Subject {
         pub(crate) name:           String,
